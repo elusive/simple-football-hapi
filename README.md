@@ -4,7 +4,7 @@ A sample app that demonstrates how to consume football-data RESTful API
 ## Getting Started
 To run this application you can use my api key temporarily but I cannot gaurantee its functionality so if you plan to use this code please obtain your own api key from: [football-data.org](https://www.football-data.org/client/register) and place it in the server.js file here on line 12: 
 ```
- 12     const API_TOKEN = 'your_api_token_goes_here';
+const API_TOKEN = 'your_api_token_goes_here';
 ```
 
 Clone the project repository by running the command below if you use SSH

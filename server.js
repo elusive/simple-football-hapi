@@ -4,8 +4,6 @@ const Hapi = require('hapi');
 const Request = require('request');
 const Vision = require('vision');
 const Handlebars = require('handlebars');
-const LodashFilter = require('lodash.filter');
-const LodashTake = require('lodash.take');
 
 const server = new Hapi.Server();
 
@@ -52,7 +50,7 @@ server.route({
 	}
 });
 
-
+// start the Hapi server instance
 server.start((err) => {
 	if (err) {
 		throw err;
@@ -60,3 +58,5 @@ server.start((err) => {
 
 	console.log(`Server running at: ${server.info.uri}`);
 });
+
+

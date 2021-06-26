@@ -10,53 +10,59 @@ const server = new Hapi.Server();
 const API_TOKEN = '131d284ab2f442d5b3b79c7c868bd37c';
 
 server.connection({
-	host: '127.0.0.1',
-	port: 3000
+    host: '127.0.0.1',
+    port: 3000
 });
 
 // Register vision for our views
 server.register(Vision, (err) => {
-	server.views({
-		engines: {
-			html: Handlebars
-		},
-		relativeTo: __dirname,
-		path: './views',
-	});
+    server.views({
+        engines: {
+            html: Handlebars
+        },
+        relativeTo: __dirname,
+        path: './views',
+    });
 });
 
 // Show teams standings
 server.route({
-	method: 'GET',
-	path: '/',
-	handler: function (request, reply) {
-		Request({
-			url: 'http://api.football-data.org/v2/teams',
-			headers : {
-				'X-Auth-Token': API_TOKEN
-		  }
-		},
-		function (error, response, body) {
-			if (error || response.statusCode != 200) // Print the HTML for the Google homepage.
-			{
-				console.error(error);
-				console.log(response);
-				console.log(body);
-			}
+    method: 'GET',
+    path: '/',
+    handler: function(request, reply) {
+        Request({
+                url: 'http://api.football-data.org/v2/teams',
+                headers: {
+                    'X-Auth-Token': API_TOKEN
+                }
+            },
+            function(error, response, body) {
+                if (error || response.statusCode != 200) // Print the HTML for the Google homepage.
+                {
+                    console.error(error);
+                    console.log(response);
+                    console.log(body);
+                }
 
-			const data = JSON.parse(body);
-			reply.view('index', { result: data });
-		});
-	}
+                const data = JSON.parse(body);
+                reply.view('index', { result: data });
+            });
+    }
 });
 
-// start the Hapi server instance
-server.start((err) => {
-	if (err) {
-		throw err;
-	}
+exports.init = async() => {
+    await server.initialize();
+    return server;
+};
 
-	console.log(`Server running at: ${server.info.uri}`);
-});
+exports.start = async() => {
+    // start the Hapi server instance
+    await server.start();
+    console.log(`Server running at: ${server.info.uri}`);
+    return server;
+};
 
-
+process.on('unhandledRejection', (err) => {
+    console.log(err);
+    process.exit(1);
+})

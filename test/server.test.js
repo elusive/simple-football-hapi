@@ -13,12 +13,13 @@ describe('Server instance testing...', () => {
     });
 
     describe('GET /', () => {
-        it('responds with 200', async() => {
+        const expected_status_when_no_route = 500;
+        it('responds with 500', async() => {
             const res = await server.inject({
                 method: 'get',
                 url: '/'
             });
-            expect(res.statusCode).to.equal(200);
+            expect(res.statusCode).to.equal(expected_status_when_no_route);
         });
     })
 });

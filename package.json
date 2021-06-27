@@ -24,12 +24,13 @@
     },
     "homepage": "https://github.com/ammezie/serie-a-standings#readme",
     "dependencies": {
-        "handlebars": "^4.3.0",
         "@hapi/hapi": "^20.0.0",
+        "@hapi/vision": "6.1.0",
+        "dotenv": "^10.0.0",
+        "handlebars": "^4.3.0",
         "lodash.filter": "^4.6.0",
         "lodash.take": "^4.1.1",
-        "request": "^2.79.0",
-        "vision": "^4.1.1"
+        "request": "^2.79.0"
     },
     "devDependencies": {
         "@hapi/code": "^8.0.3",

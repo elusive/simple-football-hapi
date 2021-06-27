@@ -1,29 +1,35 @@
 'use strict'
 
-const Hapi = require('hapi');
+require('dotenv').config();
+
+const Hapi = require('@hapi/hapi');
 const Request = require('request');
-const Vision = require('vision');
+const Vision = require('@hapi/vision');
 const Handlebars = require('handlebars');
 
-const server = new Hapi.Server();
 
-const API_TOKEN = '131d284ab2f442d5b3b79c7c868bd37c';
+const API_TOKEN = process.env.API_TOKEN || 'example-api-token-here-123456';
+const HOST_PORT = process.env.HOST_PORT || 3000;
+const HOST_IP = process.env.HOST_IP || 'localhost';
 
-server.connection({
-    host: '127.0.0.1',
-    port: 3000
+
+// Setup server connection properties
+const server = new Hapi.server({
+    host: HOST_IP,
+    port: HOST_PORT
 });
+
 
 // Register vision for our views
-server.register(Vision, (err) => {
-    server.views({
-        engines: {
-            html: Handlebars
-        },
-        relativeTo: __dirname,
-        path: './views',
-    });
+server.register(require('@hapi/vision'));
+server.views({
+    engines: {
+        html: require('handlebars')
+    },
+    relativeTo: __dirname,
+    path: './views',
 });
+
 
 // Show teams standings
 server.route({
@@ -36,6 +42,7 @@ server.route({
                     'X-Auth-Token': API_TOKEN
                 }
             },
+
             function(error, response, body) {
                 if (error || response.statusCode != 200) // Print the HTML for the Google homepage.
                 {
@@ -50,13 +57,13 @@ server.route({
     }
 });
 
+
 exports.init = async() => {
     await server.initialize();
     return server;
 };
 
 exports.start = async() => {
-    // start the Hapi server instance
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
     return server;
